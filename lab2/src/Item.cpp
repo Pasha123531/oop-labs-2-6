@@ -35,6 +35,6 @@ void Item::setValue(int value) {
 
 std::string Item::info() const {
     std::ostringstream oss;
-    oss << "Item{name='" << name_ << "', weight=" << weight_ << ", value=" << value_ << "}";
+    oss << "Item {name='" << name_ << "', weight=" << weight_ << ", value=" << value_ << "}";
     return oss.str();
 }
