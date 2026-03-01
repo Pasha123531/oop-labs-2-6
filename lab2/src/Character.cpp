@@ -50,7 +50,7 @@ bool Character::isAlive() const {
 
 std::string Character::info() const {
     std::ostringstream oss;
-    oss << "Character {name='" << name_ << "', weight=" << hp_ << ", value=" << attack_ << "}";
+    oss << "Character {name='" << name_ << "', hp=" << hp_ << ", attack=" << attack_ << "}";
     return oss.str();
 }
 
