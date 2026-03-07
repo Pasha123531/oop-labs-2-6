@@ -4,6 +4,8 @@
 #include <utility>
 #include <algorithm>
 
+int Chest::objectCount_ = 0;
+
 Chest::Chest() : Chest("Old Chest") {}
 
 Chest::Chest(std::string title, bool locked, int gold)
@@ -15,6 +17,8 @@ Chest::Chest(std::string title, bool locked, int gold)
 {
     if (gold_ < 0)
         throw std::invalid_argument("Gold cannot be negative");
+
+    ++objectCount_;
 }
 
 Chest::Chest(const Chest& other)
@@ -24,9 +28,24 @@ Chest::Chest(const Chest& other)
       item_(other.item_),
       hasItem_(other.hasItem_)
 {
+    ++objectCount_;
 }
 
-Chest::~Chest() = default;
+Chest::Chest(Chest&& other) noexcept
+    : title_(std::move(other.title_)),
+      locked_(other.locked_),
+      gold_(other.gold_),
+      item_(std::move(other.item_)),
+      hasItem_(other.hasItem_)
+{
+    other.gold_ = 0;
+    other.hasItem_ = false;
+    ++objectCount_;
+}
+
+Chest::~Chest() {
+    --objectCount_;
+}
 
 const std::string& Chest::title() const { return title_; }
 bool Chest::locked() const { return locked_; }
@@ -39,7 +58,7 @@ void Chest::unlock() { locked_ = false; }
 void Chest::addGold(int amount)
 {
     if (amount > 0)
-        gold_ += amount;
+        this->gold_ += amount;
 }
 
 int Chest::takeGold(int amount)
@@ -91,4 +110,65 @@ std::string Chest::info() const
     oss << "}";
 
     return oss.str();
+}
+
+int Chest::getObjectCount() {
+    return objectCount_;
+}
+
+bool Chest::operator!() const {
+    return locked_;
+}
+
+Chest Chest::operator+(const Chest& other) const {
+    Chest result("Merged Chest");
+    result.gold_ = this->gold_ + other.gold_;
+    result.locked_ = this->locked_ || other.locked_;
+    return result;
+}
+
+Chest& Chest::operator=(const Chest& other) {
+    if (this != &other) {
+        this->title_ = other.title_;
+        this->locked_ = other.locked_;
+        this->gold_ = other.gold_;
+        this->item_ = other.item_;
+        this->hasItem_ = other.hasItem_;
+    }
+    return *this;
+}
+
+Chest& Chest::operator=(Chest&& other) noexcept {
+    if (this != &other) {
+        this->title_ = std::move(other.title_);
+        this->locked_ = other.locked_;
+        this->gold_ = other.gold_;
+        this->item_ = std::move(other.item_);
+        this->hasItem_ = other.hasItem_;
+
+        other.gold_ = 0;
+        other.hasItem_ = false;
+    }
+    return *this;
+}
+
+std::ostream& operator<<(std::ostream& os, const Chest& chest) {
+    os << chest.info();
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, Chest& chest) {
+    std::string title;
+    int gold;
+
+    std::cout << "Enter chest title: ";
+    is >> title;
+
+    std::cout << "Enter gold: ";
+    is >> gold;
+
+    chest.title_ = title;
+    chest.gold_ = gold;
+
+    return is;
 }

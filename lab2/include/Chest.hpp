@@ -11,11 +11,16 @@ class Chest {
     Item item_;
     bool hasItem_;
 
+    static int objectCount_;
+
     public:
     Chest();
     Chest(std::string title, bool locked = false, int gold = 0);
-    Chest(const Chest& other);
-    ~Chest();
+
+    Chest(const Chest& other); //copy
+    Chest(Chest&& other) noexcept; //move
+
+    ~Chest(); //destructor
 
     const std::string& title() const;
     bool locked() const;
@@ -32,4 +37,16 @@ class Chest {
     Item takeItem();
 
     std::string info() const;
+
+    static int getObjectCount();
+
+    bool operator!() const;
+
+    Chest operator+(const Chest& other) const;
+
+    Chest& operator=(const Chest& other);
+    Chest& operator=(Chest&& other) noexcept;
+
+    friend std::ostream& operator<<(std::ostream& os, const Chest& chest);
+    friend std::istream& operator>>(std::istream& is, Chest& chest);
 };
