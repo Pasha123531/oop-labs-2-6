@@ -17,7 +17,7 @@ class Item {
     Item(const Item& other); //copy
     Item(Item&& other) noexcept; //move
 
-    ~Item(); //destructor
+    virtual ~Item(); //destructor
 
     const std::string& name() const;
     double weight() const;
@@ -27,7 +27,7 @@ class Item {
     void setWeight(double weight);
     void setValue(int value);
 
-    std::string info() const;
+    virtual std::string info() const;
 
     static int getObjectCount();
 
