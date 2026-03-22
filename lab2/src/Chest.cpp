@@ -6,23 +6,24 @@
 
 int Chest::objectCount_ = 0;
 
-Chest::Chest() : Chest("Old Chest") {}
+Chest::Chest() : Chest("Old Chest", false, 0) {}
 
-Chest::Chest(std::string title, bool locked, int gold)
-    : title_(std::move(title)),
+Chest::Chest(std::string name, bool locked, int gold)
+    : Entity(std::move(name)),
       locked_(locked),
       gold_(gold),
       item_(),
       hasItem_(false)
 {
-    if (gold_ < 0)
+    if (gold_ < 0) {
         throw std::invalid_argument("Gold cannot be negative");
+    }
 
     ++objectCount_;
 }
 
 Chest::Chest(const Chest& other)
-    : title_(other.title_),
+    : Entity(other),
       locked_(other.locked_),
       gold_(other.gold_),
       item_(other.item_),
@@ -32,7 +33,7 @@ Chest::Chest(const Chest& other)
 }
 
 Chest::Chest(Chest&& other) noexcept
-    : title_(std::move(other.title_)),
+    : Entity(std::move(other)),
       locked_(other.locked_),
       gold_(other.gold_),
       item_(std::move(other.item_)),
@@ -47,65 +48,79 @@ Chest::~Chest() {
     --objectCount_;
 }
 
-const std::string& Chest::title() const { return title_; }
-bool Chest::locked() const { return locked_; }
-int Chest::gold() const { return gold_; }
-bool Chest::hasItem() const { return hasItem_; }
-
-void Chest::lock() { locked_ = true; }
-void Chest::unlock() { locked_ = false; }
-
-void Chest::addGold(int amount)
-{
-    if (amount > 0)
-        this->gold_ += amount;
+bool Chest::locked() const {
+    return locked_;
 }
 
-int Chest::takeGold(int amount)
-{
-    if (locked_)
-        throw std::runtime_error("Chest is locked");
+int Chest::gold() const {
+    return gold_;
+}
 
-    if (amount < 0)
+bool Chest::hasItem() const {
+    return hasItem_;
+}
+
+void Chest::lock() {
+    locked_ = true;
+}
+
+void Chest::unlock() {
+    locked_ = false;
+}
+
+void Chest::addGold(int amount) {
+    if (amount > 0) {
+        gold_ += amount;
+    }
+}
+
+int Chest::takeGold(int amount) {
+    if (locked_) {
+        throw std::runtime_error("Chest is locked");
+    }
+
+    if (amount < 0) {
         return 0;
+    }
 
     int taken = std::min(gold_, amount);
     gold_ -= taken;
     return taken;
 }
 
-void Chest::putItem(const Item& item)
-{
-    if (locked_)
+void Chest::putItem(const Item& item) {
+    if (locked_) {
         throw std::runtime_error("Chest is locked");
+    }
 
     item_ = item;
     hasItem_ = true;
 }
 
-Item Chest::takeItem()
-{
-    if (locked_)
+Item Chest::takeItem() {
+    if (locked_) {
         throw std::runtime_error("Chest is locked");
+    }
 
-    if (!hasItem_)
+    if (!hasItem_) {
         throw std::runtime_error("Chest is empty");
+    }
 
     hasItem_ = false;
     return item_;
 }
 
-std::string Chest::info() const
-{
+std::string Chest::info() const {
     std::ostringstream oss;
 
-    oss << "Chest {title='" << title_
+    oss << "Chest {name='" << name()
         << "', locked=" << (locked_ ? "true" : "false")
         << ", gold=" << gold_
         << ", hasItem=" << (hasItem_ ? "true" : "false");
 
-    if (hasItem_)
+    if (hasItem_) {
         oss << ", item=" << item_.info();
+    }
 
     oss << "}";
 
@@ -129,22 +144,22 @@ Chest Chest::operator+(const Chest& other) const {
 
 Chest& Chest::operator=(const Chest& other) {
     if (this != &other) {
-        this->title_ = other.title_;
-        this->locked_ = other.locked_;
-        this->gold_ = other.gold_;
-        this->item_ = other.item_;
-        this->hasItem_ = other.hasItem_;
+        Entity::operator=(other);
+        locked_ = other.locked_;
+        gold_ = other.gold_;
+        item_ = other.item_;
+        hasItem_ = other.hasItem_;
     }
     return *this;
 }
 
 Chest& Chest::operator=(Chest&& other) noexcept {
     if (this != &other) {
-        this->title_ = std::move(other.title_);
-        this->locked_ = other.locked_;
-        this->gold_ = other.gold_;
-        this->item_ = std::move(other.item_);
-        this->hasItem_ = other.hasItem_;
+        Entity::operator=(std::move(other));
+        locked_ = other.locked_;
+        gold_ = other.gold_;
+        item_ = std::move(other.item_);
+        hasItem_ = other.hasItem_;
 
         other.gold_ = 0;
         other.hasItem_ = false;

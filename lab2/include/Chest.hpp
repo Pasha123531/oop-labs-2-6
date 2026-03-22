@@ -1,11 +1,11 @@
 #pragma once
+#include "Entity.hpp"
+#include "Item.hpp"
 #include <iostream>
 #include <string>
-#include "Item.hpp"
 
-class Chest {
-    private:
-    std::string title_;
+class Chest : public Entity {
+private:
     bool locked_;
     int gold_;
     Item item_;
@@ -13,16 +13,15 @@ class Chest {
 
     static int objectCount_;
 
-    public:
+public:
     Chest();
-    Chest(std::string title, bool locked = false, int gold = 0);
+    Chest(std::string name, bool locked = false, int gold = 0);
 
-    Chest(const Chest& other); //copy
-    Chest(Chest&& other) noexcept; //move
+    Chest(const Chest& other);
+    Chest(Chest&& other) noexcept;
 
-    ~Chest(); //destructor
+    virtual ~Chest();
 
-    const std::string& title() const;
     bool locked() const;
     int gold() const;
     bool hasItem() const;
@@ -36,12 +35,11 @@ class Chest {
     void putItem(const Item& item);
     Item takeItem();
 
-    std::string info() const;
+    virtual std::string info() const override;
 
     static int getObjectCount();
 
     bool operator!() const;
-
     Chest operator+(const Chest& other) const;
 
     Chest& operator=(const Chest& other);
