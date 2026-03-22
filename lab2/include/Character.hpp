@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-class Character : public Entity {
+class Character : public Entity { // Public inheritance
 protected:
     int hp_;
     int attack_;
