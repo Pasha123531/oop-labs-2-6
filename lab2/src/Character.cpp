@@ -4,7 +4,7 @@
 #include <utility>
 #include <algorithm>
 
-int Character::objectCount_ = 0;
+int Character::objectCount_ = 0; // static
 
 Character::Character() : Character("IronKnight") {}
 
@@ -17,16 +17,16 @@ Character::Character(std::string name, int hp, int attack)
     if (attack_ < 0) {
         throw std::invalid_argument("Attack cannot be negative");
     }
-    ++objectCount_;
+    ++objectCount_; 
 }
 
-Character::Character(const Character& other)
+Character::Character(const Character& other) // copy constructor
     : name_(other.name_), hp_(other.hp_), attack_(other.attack_) 
 {
     ++objectCount_;
 }
 
-Character::Character(Character&& other) noexcept
+Character::Character(Character&& other) noexcept // move constructor
     : name_(std::move(other.name_)), hp_(other.hp_), attack_(other.attack_)
 {
     other.hp_ = 0;
@@ -39,7 +39,7 @@ Character::~Character() {
     --objectCount_;
 }
 
-const std::string& Character::name() const {
+const std::string& Character::name() const { // const
     return name_;
 }
 
@@ -51,7 +51,7 @@ int Character::attack() const {
     return attack_;
 }
 
-void Character::setName(const std::string& name) {
+void Character::setName(const std::string& name) { // this
     this->name_ = name;
 }
 
@@ -100,11 +100,11 @@ int Character::getObjectCount() {
     return objectCount_;
 }
 
-bool Character::operator!() const {
+bool Character::operator!() const { // unary operator
     return !isAlive();
 }
 
-Character Character::operator+(const Character& other) const {
+Character Character::operator+(const Character& other) const { // binary operator
     std::string newName = name_ + "-" + other.name_;
     int newHp = hp_ + other.hp_;
     int newAttack = attack_ + other.attack_;
@@ -138,28 +138,5 @@ std::ostream& operator<<(std::ostream& os, const Character& character) {
        << ", HP: " << character.hp_
        << ", Attack: " << character.attack_;
     return os;
-}
-
-std::istream& operator>>(std::istream& is, Character& character) {
-    std::string name;
-    int hp;
-    int attack;
-
-    std::cout << "Enter name: ";
-    is >> name;
-    std::cout << "Enter hp: ";
-    is >> hp;
-    std::cout << "Enter attack: ";
-    is >> attack;
-
-    if (hp < 0 || attack < 0) {
-        throw std::invalid_argument("HP and attack cannot be negative");
-    }
-
-    character.name_ = name;
-    character.hp_ = hp;
-    character.attack_ = attack;
-
-    return is;
 }
 

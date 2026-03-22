@@ -156,19 +156,3 @@ std::ostream& operator<<(std::ostream& os, const Chest& chest) {
     os << chest.info();
     return os;
 }
-
-std::istream& operator>>(std::istream& is, Chest& chest) {
-    std::string title;
-    int gold;
-
-    std::cout << "Enter chest title: ";
-    is >> title;
-
-    std::cout << "Enter gold: ";
-    is >> gold;
-
-    chest.title_ = title;
-    chest.gold_ = gold;
-
-    return is;
-}

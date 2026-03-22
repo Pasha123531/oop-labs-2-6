@@ -48,5 +48,4 @@ class Chest {
     Chest& operator=(Chest&& other) noexcept;
 
     friend std::ostream& operator<<(std::ostream& os, const Chest& chest);
-    friend std::istream& operator>>(std::istream& is, Chest& chest);
 };

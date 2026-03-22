@@ -39,5 +39,4 @@ class Item {
     Item& operator=(Item&& other) noexcept;
 
     friend std::ostream& operator<<(std::ostream& os, const Item& item);
-    friend std::istream& operator>>(std::istream& is, Item& item);
 };

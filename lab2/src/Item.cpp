@@ -102,24 +102,3 @@ std::ostream& operator<<(std::ostream& os, const Item& item) {
     os << item.info();
     return os;
 }
-
-std::istream& operator>>(std::istream& is, Item& item) {
-    std::string name;
-    double weight;
-    int value;
-
-    std::cout << "Enter item name: ";
-    is >> name;
-
-    std::cout << "Enter weight: ";
-    is >> weight;
-
-    std::cout << "Enter value: ";
-    is >> value;
-
-    item.name_ = name;
-    item.weight_ = weight;
-    item.value_ = value;
-
-    return is;
-}

@@ -8,18 +8,18 @@ class Character {
     int hp_;
     int attack_;
 
-    static int objectCount_;
+    static int objectCount_; // static
 
     public:
-    Character(); //делегування
+    Character();
     Character(std::string name, int hp = 100, int attack = 10);
    
-    Character(const Character& other); //copy
-    Character(Character&& other) noexcept; //move
+    Character(const Character& other); // copy constructor
+    Character(Character&& other) noexcept; // move constructor
    
-    ~Character(); //destructor
+    ~Character(); // destructor
 
-    const std::string& name() const;
+    const std::string& name() const; // const
     int hp() const;
     int attack() const;
     
@@ -36,14 +36,13 @@ class Character {
 
     static int getObjectCount(); 
 
-    bool operator!() const;
+    bool operator!() const; // unary operator
 
-    Character operator+(const Character& other) const; 
+    Character operator+(const Character& other) const; // binary operator
 
     Character& operator=(const Character& other);
 
     Character& operator=(Character&& other) noexcept;
 
     friend std::ostream& operator<<(std::ostream& os, const Character& character);
-    friend std::istream& operator>>(std::istream& is, Character& character);
 };

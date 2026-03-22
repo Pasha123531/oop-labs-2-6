@@ -35,19 +35,19 @@ int main() {
         std::cout << "Hero: " << hero << std::endl;
         std::cout << "Mage: " << mage << std::endl;
 
-        Character team = hero + mage;
+        Character team = hero + mage; // binary operator
         std::cout << "Combined character: " << team << std::endl;
 
-        Character copiedHero = hero;
+        Character copiedHero = hero; // copy constructor
         std::cout << "Copied hero: " << copiedHero << std::endl;
 
-        Character movedMage = std::move(mage);
+        Character movedMage = std::move(mage); // move constructor
         std::cout << "Moved character: " << movedMage << std::endl;
 
         hero.takeDamage(150);
         std::cout << "Hero after damage: " << hero << std::endl;
 
-        if (!hero) {
+        if (!hero) { // unary operator
             std::cout << "Unary ! for Character works: hero is dead\n";
         }
 
@@ -76,19 +76,6 @@ int main() {
         }
 
         std::cout << "Chest objects count: " << Chest::getObjectCount() << std::endl;
-
-        std::cout << "\n=== INPUT DEMO ===\n";
-        Item userItem;
-        std::cin >> userItem;
-        std::cout << "You entered item: " << userItem << std::endl;
-
-        Character userCharacter;
-        std::cin >> userCharacter;
-        std::cout << "You entered character: " << userCharacter << std::endl;
-
-        Chest userChest;
-        std::cin >> userChest;
-        std::cout << "You entered chest: " << userChest << std::endl;
     }
     catch (const std::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
