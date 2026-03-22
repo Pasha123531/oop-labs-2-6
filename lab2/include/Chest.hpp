@@ -8,7 +8,7 @@ class Chest : public Entity {
 private:
     bool locked_;
     int gold_;
-    Item item_;
+    Item item_; // Has-A relationship (composition)
     bool hasItem_;
 
     static int objectCount_;
@@ -20,7 +20,7 @@ public:
     Chest(const Chest& other);
     Chest(Chest&& other) noexcept;
 
-    virtual ~Chest();
+    virtual ~Chest(); // destructor
 
     bool locked() const;
     int gold() const;
