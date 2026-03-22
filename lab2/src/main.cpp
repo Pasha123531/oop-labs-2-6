@@ -27,7 +27,9 @@ int main() {
 
         std::cout << "\n=== CHARACTER ===\n";
         Character hero("Hero", 120, 25);
+        Character mage("Mage", 80, 40);
         std::cout << hero << std::endl;
+        std::cout << mage << std::endl;
 
         std::cout << "\n=== PLAYER ===\n";
         Player player("PlayerOne", 100, 20, 5);
@@ -57,9 +59,9 @@ int main() {
         Item combined = sword + shield;
         std::cout << "Combined item: " << combined << std::endl;
 
-        Character team = hero + Character("Mage", 80, 40);
+        Character team = hero + mage;
         std::cout << "Combined character: " << team << std::endl;
-
+        
         if (!hero) {
             std::cout << "Hero is dead\n";
         }
