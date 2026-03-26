@@ -2,20 +2,21 @@
 #include <sstream>
 #include <stdexcept>
 #include <utility>
+#include <iostream>
 
 Weapon::Weapon() : Weapon("Wooden Sword", 2.0, 20, 10) {}
 
-Weapon::Weapon(std::string name, double weight, int value, int damage)
-    : Item(std::move(name), weight, value), damage_(damage) {
+Weapon::Weapon(const std::string& name, double weight, int value, int damage)
+    : Item(name, weight, value), damage_(damage) {
     if (damage_ < 0) {
         throw std::invalid_argument("Damage cannot be negative");
     }
 }
 
-Weapon::Weapon(const Weapon& other)
+Weapon::Weapon(const Weapon& other) // copy constructor
     : Item(other), damage_(other.damage_) {}
 
-Weapon::Weapon(Weapon&& other) noexcept
+Weapon::Weapon(Weapon&& other) noexcept // move constructor
     : Item(std::move(other)), damage_(other.damage_) {
     other.damage_ = 0;
 }
@@ -41,6 +42,11 @@ std::string Weapon::info() const {
         << ", damage=" << damage_
         << "}";
     return oss.str();
+}
+
+void Weapon::interact() const { // interact
+    std::cout << "You equip the weapon: " << name()
+              << " (damage: " << damage_ << ")\n";
 }
 
 Weapon& Weapon::operator=(const Weapon& other) {
