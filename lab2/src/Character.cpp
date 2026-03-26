@@ -20,13 +20,13 @@ Character::Character(const std::string& name, int hp, int attack)
     ++objectCount_;
 }
 
-Character::Character(const Character& other)
+Character::Character(const Character& other) // сopy constructor
     : Entity(other), hp_(other.hp_), attack_(other.attack_)
 {
     ++objectCount_;
 }
 
-Character::Character(Character&& other) noexcept
+Character::Character(Character&& other) noexcept // move constructor
     : Entity(std::move(other)), hp_(other.hp_), attack_(other.attack_)
 {
     other.hp_ = 0;
