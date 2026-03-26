@@ -3,13 +3,14 @@
 #include <stdexcept>
 #include <utility>
 #include <algorithm>
+#include <iostream>
 
 int Chest::objectCount_ = 0;
 
 Chest::Chest() : Chest("Old Chest", false, 0) {}
 
-Chest::Chest(std::string name, bool locked, int gold)
-    : Entity(std::move(name)),
+Chest::Chest(const std::string& name, bool locked, int gold)
+    : Entity(name),
       locked_(locked),
       gold_(gold),
       item_(),
@@ -22,7 +23,7 @@ Chest::Chest(std::string name, bool locked, int gold)
     ++objectCount_;
 }
 
-Chest::Chest(const Chest& other)
+Chest::Chest(const Chest& other) // copy constructor
     : Entity(other),
       locked_(other.locked_),
       gold_(other.gold_),
@@ -32,7 +33,7 @@ Chest::Chest(const Chest& other)
     ++objectCount_;
 }
 
-Chest::Chest(Chest&& other) noexcept
+Chest::Chest(Chest&& other) noexcept // move constructor
     : Entity(std::move(other)),
       locked_(other.locked_),
       gold_(other.gold_),
@@ -127,6 +128,24 @@ std::string Chest::info() const {
     return oss.str();
 }
 
+void Chest::interact() const { // interact
+    std::cout << "You interact with chest: " << name() << "\n";
+
+    if (locked_) {
+        std::cout << "The chest is locked.\n";
+    } else {
+        std::cout << "The chest is open.\n";
+
+     if (gold_ > 0) {
+        std::cout << "It contains " << gold_ << " gold.\n";
+        }
+    if (hasItem_) {
+        std::cout << "There is an item inside: "
+        << item_.info() << "\n";
+        }
+    }
+}
+
 int Chest::getObjectCount() {
     return objectCount_;
 }
@@ -136,9 +155,16 @@ bool Chest::operator!() const {
 }
 
 Chest Chest::operator+(const Chest& other) const {
-    Chest result("Merged Chest");
-    result.gold_ = this->gold_ + other.gold_;
-    result.locked_ = this->locked_ || other.locked_;
+    Chest result("Merged Chest", this->locked_ || other.locked_, this->gold_ + other.gold_);
+
+    if (this->hasItem_) {
+        result.item_ = this->item_;
+        result.hasItem_ = true;
+    } else if (other.hasItem_) {
+        result.item_ = other.item_;
+        result.hasItem_ = true;
+    }
+
     return result;
 }
 

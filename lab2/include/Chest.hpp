@@ -15,12 +15,11 @@ private:
 
 public:
     Chest();
-    Chest(std::string name, bool locked = false, int gold = 0);
-
+    Chest(const std::string& name, bool locked, int gold);
     Chest(const Chest& other);
     Chest(Chest&& other) noexcept;
 
-    virtual ~Chest(); // destructor
+    ~Chest() override; // destructor
 
     bool locked() const;
     int gold() const;
@@ -35,7 +34,8 @@ public:
     void putItem(const Item& item);
     Item takeItem();
 
-    virtual std::string info() const override;
+    std::string info() const override;
+    void interact() const override; // interact
 
     static int getObjectCount();
 
