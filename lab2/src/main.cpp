@@ -46,6 +46,24 @@ int main() {
 
         std::cout << moved << std::endl;
 
+        std::cout << "\n=== DAMAGE & HEAL DEMO ===\n";
+
+        Warrior fighter("Fighter", 150, 35, 10, 50);
+        Weapon battleAxe("Battle Axe", 6.5, 250, 40);
+
+        std::cout << "Before battle: " << fighter.info() << std::endl;
+        std::cout << "Weapon used: " << battleAxe.info() << std::endl;
+
+        fighter.takeDamage(battleAxe.damage());
+        std::cout << fighter.name() << " received "
+          << battleAxe.damage() << " damage from "
+          << battleAxe.name() << ".\n";
+        std::cout << "After hit: " << fighter.info() << std::endl;
+
+        fighter.heal(20);
+        std::cout << fighter.name() << " healed 20 HP.\n";
+        std::cout << "After healing: " << fighter.info() << std::endl;
+
         std::cout << "\n=== COMPOSITION (CHEST) ===\n";
 
         Chest chest("Chest", false, 200);
