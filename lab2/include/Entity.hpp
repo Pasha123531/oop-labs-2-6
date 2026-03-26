@@ -11,12 +11,14 @@ public:
     Entity(std::string name);
     Entity(const Entity& other);
     Entity(Entity&& other) noexcept;
-    virtual ~Entity();
+
+    virtual ~Entity();   // virtual
 
     const std::string& name() const;
     void setName(const std::string& name);
 
-    virtual std::string info() const;
+    virtual std::string info() const;  
+    virtual void interact() const;      
 
     Entity& operator=(const Entity& other);
     Entity& operator=(Entity&& other) noexcept;
