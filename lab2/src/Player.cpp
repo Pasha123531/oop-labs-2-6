@@ -2,11 +2,12 @@
 #include <sstream>
 #include <stdexcept>
 #include <utility>
+#include <iostream>
 
 Player::Player() : Player("DefaultPlayer", 100, 15, 1) {}
 
-Player::Player(std::string name, int hp, int attack, int level)
-    : Character(std::move(name), hp, attack), level_(level)
+Player::Player(const std::string& name, int hp, int attack, int level)
+    : Character(name, hp, attack), level_(level)
 {
     if (level_ < 1) {
         throw std::invalid_argument("Level must be at least 1");
@@ -16,7 +17,7 @@ Player::Player(std::string name, int hp, int attack, int level)
 Player::Player(const Player& other) // copy constructor
     : Character(other), level_(other.level_) {}
 
-Player::Player(Player&& other) noexcept // move consturcotr
+Player::Player(Player&& other) noexcept // move constructor
     : Character(std::move(other)), level_(other.level_)
 {
     other.level_ = 1;
@@ -43,6 +44,11 @@ std::string Player::info() const {
         << ", level=" << level_
         << "}";
     return oss.str();
+}
+
+void Player::interact() const { // interact
+    std::cout << "Player " << name()
+              << " explores the world. (level: " << level_ << ")\n";
 }
 
 Player& Player::operator=(const Player& other) {

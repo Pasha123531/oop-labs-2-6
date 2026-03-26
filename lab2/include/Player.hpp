@@ -8,8 +8,7 @@ protected:
 
 public:
     Player();
-    Player(std::string name, int hp, int attack, int level);
-
+    Player(const std::string& name, int hp, int attack, int level);
     Player(const Player& other);
     Player(Player&& other) noexcept;
 
@@ -19,6 +18,7 @@ public:
     void setLevel(int level);
 
     std::string info() const override;
+    void interact() const override;   // interact
 
     Player& operator=(const Player& other);
     Player& operator=(Player&& other) noexcept;
