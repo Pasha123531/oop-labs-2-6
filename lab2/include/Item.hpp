@@ -1,22 +1,21 @@
 #pragma once
 #include "Entity.hpp"
+#include <iostream>
 #include <string>
 
 class Item : public Entity {
 protected:
     double weight_;
     int value_;
-
-    static int objectCount_; // static
+    static int objectCount_;
 
 public:
     Item();
-    Item(std::string name, double weight = 0.1, int value = 0);
+    Item(const std::string& name, double weight, int value);
+    Item(const Item& other);
+    Item(Item&& other) noexcept;
 
-    Item(const Item& other); // copy constructor
-    Item(Item&& other) noexcept; // move constructor
-
-    virtual ~Item(); // destructor
+    ~Item() override;
 
     double weight() const;
     int value() const;
@@ -24,12 +23,13 @@ public:
     void setWeight(double weight);
     void setValue(int value);
 
-    virtual std::string info() const;
+    std::string info() const override;
+    void interact() const override;
 
     static int getObjectCount();
 
-    bool operator!() const; // unary operator
-    Item operator+(const Item& other) const; // binary operator
+    bool operator!() const;
+    Item operator+(const Item& other) const;
 
     Item& operator=(const Item& other);
     Item& operator=(Item&& other) noexcept;

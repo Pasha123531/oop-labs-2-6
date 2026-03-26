@@ -2,13 +2,15 @@
 #include <sstream>
 #include <stdexcept>
 #include <utility>
+#include <iostream>
 
 int Item::objectCount_ = 0;
 
 Item::Item() : Item("Unknown Item", 0.1, 0) {}
 
-Item::Item(std::string name, double weight, int value)
-    : Entity(std::move(name)), weight_(weight), value_(value) {
+Item::Item(const std::string& name, double weight, int value)
+    : Entity(name), weight_(weight), value_(value)
+{
     if (weight_ < 0) {
         throw std::invalid_argument("Item weight cannot be negative");
     }
@@ -18,13 +20,15 @@ Item::Item(std::string name, double weight, int value)
     ++objectCount_;
 }
 
-Item::Item(const Item& other)
-    : Entity(other), weight_(other.weight_), value_(other.value_) {
+Item::Item(const Item& other) // copy constructor
+    : Entity(other), weight_(other.weight_), value_(other.value_)
+{
     ++objectCount_;
 }
 
-Item::Item(Item&& other) noexcept
-    : Entity(std::move(other)), weight_(other.weight_), value_(other.value_) {
+Item::Item(Item&& other) noexcept // move constructor
+    : Entity(std::move(other)), weight_(other.weight_), value_(other.value_)
+{
     other.weight_ = 0;
     other.value_ = 0;
     ++objectCount_;
@@ -58,11 +62,17 @@ void Item::setValue(int value) {
 
 std::string Item::info() const {
     std::ostringstream oss;
-    oss << "Item {name='" << name_
+    oss << "Item {name='" << name()
         << "', weight=" << weight_
         << ", value=" << value_
         << "}";
     return oss.str();
+}
+
+void Item::interact() const { // interact
+    std::cout << "You inspect the item: " << name()
+              << " (weight: " << weight_
+              << ", value: " << value_ << ")\n";
 }
 
 int Item::getObjectCount() {
@@ -74,7 +84,7 @@ bool Item::operator!() const {
 }
 
 Item Item::operator+(const Item& other) const {
-    std::string newName = name_ + "-" + other.name_;
+    std::string newName = name() + "-" + other.name();
     double newWeight = weight_ + other.weight_;
     int newValue = value_ + other.value_;
 
