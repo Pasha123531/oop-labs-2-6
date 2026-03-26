@@ -1,5 +1,6 @@
 #include <iostream>
-#include <utility>
+#include <vector>
+#include <memory>
 #include "Entity.hpp"
 #include "Item.hpp"
 #include "Weapon.hpp"
@@ -10,70 +11,70 @@
 
 int main() {
     try {
-        std::cout << "=== ENTITY ===\n";
-        Entity entity("BaseObject");
-        std::cout << entity << std::endl;
+        std::cout << "=== STATIC BINDING ===\n";
 
-        std::cout << "\n=== ITEM ===\n";
-        Item sword("Iron Sword", 3.5, 100);
-        Item shield("Steel Shield", 5.0, 150);
+        Item item("Simple Item", 1.0, 10);
+        std::cout << item.info() << std::endl; // compile-time binding
 
-        std::cout << sword << std::endl;
-        std::cout << shield << std::endl;
+        std::cout << "\n=== DYNAMIC BINDING (POINTER) ===\n";
 
-        std::cout << "\n=== WEAPON ===\n";
-        Weapon axe("Battle Axe", 6.5, 250, 45);
-        std::cout << axe << std::endl;
+        std::vector<Entity*> entities;
 
-        std::cout << "\n=== CHARACTER ===\n";
-        Character hero("Hero", 120, 25);
-        Character mage("Mage", 80, 40);
-        std::cout << hero << std::endl;
-        std::cout << mage << std::endl;
+        entities.push_back(new Item("Sword", 3.5, 100));
+        entities.push_back(new Weapon("Axe", 5.0, 200, 40));
+        entities.push_back(new Player("PlayerOne", 100, 20, 5));
+        entities.push_back(new Warrior("Warrior", 150, 30, 10, 50));
+        entities.push_back(new Chest("Treasure", false, 300));
 
-        std::cout << "\n=== PLAYER ===\n";
-        Player player("PlayerOne", 100, 20, 5);
-        std::cout << player << std::endl;
+        for (const auto& e : entities) {
+            std::cout << e->info() << std::endl;
+            e->interact(); // dynamic
+        }
 
-        std::cout << "\n=== WARRIOR ===\n";
+        std::cout << "\n=== DYNAMIC BINDING (REFERENCE) ===\n";
+
         Warrior warrior("StrongWarrior", 150, 35, 10, 50);
-        std::cout << warrior << std::endl;
+        Entity& ref = warrior;
+
+        std::cout << ref.info() << std::endl;
+        ref.interact(); // dynamic binding через reference
 
         std::cout << "\n=== COPY & MOVE ===\n";
-        Warrior copyWarrior = warrior;
-        std::cout << "Copied: " << copyWarrior << std::endl;
 
-        Warrior movedWarrior = std::move(copyWarrior);
-        std::cout << "Moved: " << movedWarrior << std::endl;
+        Warrior copy = warrior;
+        Warrior moved = std::move(copy);
 
-        std::cout << "\n=== CHEST (HAS-A) ===\n";
-        Chest chest("TreasureChest", false, 200);
-        chest.putItem(axe);
+        std::cout << moved << std::endl;
+
+        std::cout << "\n=== COMPOSITION (CHEST) ===\n";
+
+        Chest chest("Chest", false, 200);
+        chest.putItem(item);
 
         std::cout << chest << std::endl;
-
-        Item taken = chest.takeItem();
-        std::cout << "Taken item: " << taken << std::endl;
+        chest.interact();
 
         std::cout << "\n=== OPERATORS ===\n";
-        Item combined = sword + shield;
-        std::cout << "Combined item: " << combined << std::endl;
 
-        Character team = hero + mage;
-        std::cout << "Combined character: " << team << std::endl;
-        
-        if (!hero) {
-            std::cout << "Hero is dead\n";
-        }
+        Item sword("Sword", 3.0, 100);
+        Item shield("Shield", 5.0, 150);
+
+        Item combined = sword + shield;
+        std::cout << combined << std::endl;
 
         if (!Item("Empty", 1.0, 0)) {
             std::cout << "Empty item detected\n";
         }
 
         std::cout << "\n=== COUNTERS ===\n";
+
         std::cout << "Items: " << Item::getObjectCount() << std::endl;
         std::cout << "Characters: " << Character::getObjectCount() << std::endl;
         std::cout << "Chests: " << Chest::getObjectCount() << std::endl;
+
+        for (auto e : entities) { // очищення пам'яті
+            delete e;
+        }
     }
     catch (const std::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
