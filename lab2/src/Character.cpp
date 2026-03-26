@@ -4,12 +4,12 @@
 #include <utility>
 #include <algorithm>
 
-int Character::objectCount_ = 0; // static
+int Character::objectCount_ = 0;
 
 Character::Character() : Character("IronKnight", 120, 25) {}
 
-Character::Character(std::string name, int hp, int attack)
-    : Entity(std::move(name)), hp_(hp), attack_(attack)
+Character::Character(const std::string& name, int hp, int attack)
+    : Entity(name), hp_(hp), attack_(attack)
 {
     if (hp_ < 0) {
         throw std::invalid_argument("HP cannot be negative");
@@ -20,13 +20,13 @@ Character::Character(std::string name, int hp, int attack)
     ++objectCount_;
 }
 
-Character::Character(const Character& other) // copy constuctor
+Character::Character(const Character& other)
     : Entity(other), hp_(other.hp_), attack_(other.attack_)
 {
     ++objectCount_;
 }
 
-Character::Character(Character&& other) noexcept // move contructor
+Character::Character(Character&& other) noexcept
     : Entity(std::move(other)), hp_(other.hp_), attack_(other.attack_)
 {
     other.hp_ = 0;
@@ -91,15 +91,8 @@ int Character::getObjectCount() {
     return objectCount_;
 }
 
-bool Character::operator!() const { // unary operator
+bool Character::operator!() const {
     return !isAlive();
-}
-
-Character Character::operator+(const Character& other) const { // binary operator
-    std::string newName = name() + "-" + other.name();
-    int newHp = hp_ + other.hp_;
-    int newAttack = attack_ + other.attack_;
-    return Character(newName, newHp, newAttack);
 }
 
 Character& Character::operator=(const Character& other) {

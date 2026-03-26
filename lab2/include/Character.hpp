@@ -3,21 +3,19 @@
 #include <iostream>
 #include <string>
 
-class Character : public Entity { // Public inheritance
+class Character : public Entity {
 protected:
     int hp_;
     int attack_;
-
-    static int objectCount_; // static
+    static int objectCount_;
 
 public:
     Character();
-    Character(std::string name, int hp = 100, int attack = 10);
+    Character(const std::string& name, int hp, int attack);
+    Character(const Character& other);
+    Character(Character&& other) noexcept;
 
-    Character(const Character& other); // copy constructor
-    Character(Character&& other) noexcept; // move constructor
-
-    virtual ~Character(); // destructor
+    virtual ~Character() override;
 
     int hp() const;
     int attack() const;
@@ -29,13 +27,13 @@ public:
     void heal(int amount);
     bool isAlive() const;
 
-    virtual std::string info() const override;
+    std::string info() const override;
+
+    virtual void interact() const override = 0;  // pure virtual function
 
     static int getObjectCount();
 
-    bool operator!() const; // unary operator
-
-    Character operator+(const Character& other) const; // binary operator
+    bool operator!() const;
 
     Character& operator=(const Character& other);
     Character& operator=(Character&& other) noexcept;
