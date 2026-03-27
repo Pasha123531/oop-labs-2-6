@@ -1,10 +1,11 @@
 #pragma once
 #include "Entity.hpp"
+#include "IOpenable.hpp"
 #include "Item.hpp"
 #include <iostream>
 #include <string>
 
-class Chest : public Entity {
+class Chest : public Entity, public IOpenable  {
 private:
     bool locked_;
     int gold_;
@@ -36,6 +37,9 @@ public:
 
     std::string info() const override;
     void interact() const override; // interact
+
+    void open() override;
+    void close() override;
 
     static int getObjectCount();
 

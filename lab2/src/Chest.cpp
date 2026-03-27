@@ -89,7 +89,14 @@ int Chest::takeGold(int amount) {
     return taken;
 }
 
-void Chest::putItem(const Item& item) {
+    void Chest::open() {
+    locked_ = false;
+}
+
+    void Chest::close() {
+    locked_ = true;
+}
+    void Chest::putItem(const Item& item) {
     if (locked_) {
         throw std::runtime_error("Chest is locked");
     }
