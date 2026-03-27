@@ -2,7 +2,7 @@
 #include "Player.hpp"
 #include <string>
 
-class Warrior : public Player {
+class Warrior final : public Player {
 private:
     int armor_;
 
