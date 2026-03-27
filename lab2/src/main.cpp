@@ -84,6 +84,19 @@ int main() {
             std::cout << "Empty item detected\n";
         }
 
+        std::cout << "\n=== INTERFACE DEMO ===\n";
+
+        Chest chestInterface("InterfaceChest", true, 100);
+        IOpenable* obj = &chestInterface;
+
+        std::cout << "Before: " << chestInterface.info() << std::endl;
+
+        obj->open();
+        std::cout << "After open: " << chestInterface.info() << std::endl;
+
+        obj->close();
+        std::cout << "After close: " << chestInterface.info() << std::endl;
+
         std::cout << "\n=== COUNTERS ===\n";
 
         std::cout << "Items: " << Item::getObjectCount() << std::endl;
