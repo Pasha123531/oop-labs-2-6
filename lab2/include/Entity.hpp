@@ -12,7 +12,7 @@ public:
     Entity(const Entity& other);
     Entity(Entity&& other) noexcept;
 
-    virtual ~Entity();   // virtual
+    virtual ~Entity();   // virtual destructor
 
     const std::string& name() const;
     void setName(const std::string& name);
@@ -25,3 +25,4 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const Entity& entity);
 };
+

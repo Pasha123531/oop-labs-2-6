@@ -29,7 +29,7 @@ public:
 
     std::string info() const override;
 
-    virtual void interact() const override = 0;  // pure virtual function
+    virtual void interact() const = 0;  // pure virtual function
 
     static int getObjectCount();
 
